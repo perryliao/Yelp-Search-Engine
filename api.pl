@@ -8,9 +8,6 @@
 %%% User-Defined Modules
 :- ensure_loaded([secrets]). 
 
-yelp_business_url("https://api.yelp.com/v3/businesses/search").
-
-
 % HTTP GET request for Yelp
 search_yelp_business(SearchTerm, Location, Category, Price, Response) :- 
   yelp_api_key(ApiKey),
