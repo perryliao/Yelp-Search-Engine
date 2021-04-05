@@ -36,13 +36,13 @@ det(['an' | P], P, _, C, C).
 det(['the' | P], P, _, C, C).
 det(P, P, _, C, C).
 
-quality_adj(['cheapest' | P], P, _, [price(1, 'LessThan')|C], C).
-quality_adj(['cheap' | P], P, _, [price(2, 'LessThan')|C], C).
-quality_adj(['fancy' | P], P, _, [price(3, 'GreaterThan'),rating(4, 'GreaterThan') |C], C).
-quality_adj(['expensive' | P], P, _, [price(4, 'EqualTo') |C], C).
-quality_adj(['good' | P], P, _, [rating(3, 'GreaterThan') |C], C).
-quality_adj(['great' | P], P, _, [rating(4, 'GreaterThan') |C], C).
-quality_adj(['amazing' | P], P, _, [rating(5, 'EqualTo') |C], C).
-quality_adj(['best' | P], P, _, [rating(5, 'EqualTo') |C], C).
-quality_adj(['worst' | P], P, _, [rating(1, 'EqualTo') |C], C).
-quality_adj(P, P, _, C, C).
+adj(['cheapest' | P], P, _, [price(1, 'LessThan')|C], C).
+adj(['cheap' | P], P, _, [price(2, 'LessThan')|C], C).
+adj(['fancy' | P], P, _, [price(3, 'GreaterThan'),rating(4, 'GreaterThan') |C], C).
+adj(['expensive' | P], P, _, [price(4, 'EqualTo') |C], C).
+adj(['good' | P], P, _, [rating(3, 'GreaterThan') |C], C).
+adj(['great' | P], P, _, [rating(4, 'GreaterThan') |C], C).
+adj(['amazing' | P], P, _, [rating(5, 'EqualTo') |C], C).
+adj(['best' | P], P, _, [rating(5, 'EqualTo') |C], C).
+adj(['worst' | P], P, _, [rating(1, 'EqualTo') |C], C).
+adj(P, P, _, C, C).
