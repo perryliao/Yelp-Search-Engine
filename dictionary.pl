@@ -9,7 +9,7 @@ starter_phrase([Imperative, Asker | T], T) :-
     asker(Asker).
 starter_phrase(['I', 'want' | P], P).
 starter_phrase(['I', 'want', 'to', 'eat' | P], P).
-starter_phrase('I\'m feeling lucky').
+starter_phrase('I\'m', 'feeling', 'lucky').
 
 imperative('Give').
 imperative('give').
