@@ -26,4 +26,8 @@ search_yelp_business(SearchTerm, Location, Category, Price, Response) :-
     ])
   ], Json, [
     authorization(bearer(ApiKey))
-  ]).
+  ]),
+  atom_json_dict(Json, Response, []).
+
+% Exmaple search request
+% search_yelp_business('taco', 'vancouver', 'mexican', '2', Response).
