@@ -9,10 +9,11 @@ askUser() :-
 
 % Request response from Yelp API for category list
 
+
 % Define knowledge base of categories
 
 
-% Define query structure ---- ex. 'what', 'where', 'give'... etc
+% Define query structure ---- ex. 'what', 'give'... etc
 
 
 % Parse user query and change them to Yelp query parameters
