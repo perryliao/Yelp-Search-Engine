@@ -10,6 +10,16 @@
 
 yelp_business_url("https://api.yelp.com/v3/businesses/search").
 
+
+% Checking for errors
+try_search(QueryParams, Response) :-
+  catch(
+    search_yelp_business(QueryParams, Response),
+    Error,
+    print_message(error, Error)
+).
+
+% Send search query
 search_yelp_business(QueryParams, Response) :-
     yelp_business_url(Url),
 	add_query_params(Url, QueryParams, RequestUrl).
