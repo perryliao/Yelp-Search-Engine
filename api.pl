@@ -12,19 +12,8 @@ yelp_business_url("https://api.yelp.com/v3/businesses/search").
 
 search_yelp_business(QueryParams, Response) :-
     yelp_business_url(Url),
-    generate_url(Url, QueryParams, RequestUrl),
+	add_query_params(Url, QueryParams, RequestUrl).
 	make_request(RequestUrl, Response).
-
-% Generates URL with the provided query params
-generate_url(Url, QueryParams, NewUrl) :-
-	add_api_key(Url, NextUrl),
-	add_query_params(NextUrl, QueryParams, NewUrl).
-
-% Adds api key as a query param to provided URL
-add_api_key(Url, NewUrl) :-
-    yelp_api_key(ApiKey),
-	string_concat("?api_key=", ApiKey, UrlEnd),
-	string_concat(Url, UrlEnd, NewUrl).
 
 % Adds query parameters to given url.
 add_query_params(Url, [], Url).
@@ -41,5 +30,6 @@ make_query_param(Key, Val, Param) :-
 
 %%% Make HTTP GET call to URL which will receive a JSON Response
 make_search_request(Url, Response) :-
-	http_get(Url, JsonResponse, []),
+    yelp_api_key(ApiKey),
+	http_get(Url, JsonResponse, [authorization(bearer(ApiKey))]),
 	atom_json_dict(JsonResponse, Response, []).
