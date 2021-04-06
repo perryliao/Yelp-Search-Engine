@@ -1,13 +1,13 @@
-starter_phrase(['What', 'is' | P], P).
-starter_phrase(['What', '\'', 's' | T], T).
-starter_phrase([Imperative | T], T) :-
+query_head(['What', 'is' | P], P).
+query_head(['What', '\'', 's' | T], T).
+query_head([Imperative | T], T) :-
     imperative(Imperative).
-starter_phrase([Imperative, Pronoun | T], T) :-
+query_head([Imperative, Pronoun | T], T) :-
     imperative(Imperative),
     pronoun(Pronoun).
-starter_phrase(['I', 'want' | P], P).
-starter_phrase(['I', 'want', 'to', 'eat' | P], P).
-starter_phrase('I\'m', 'feeling', 'lucky').
+query_head(['I', 'want' | P], P).
+query_head(['I', 'want', 'to', 'eat' | P], P).
+query_head(P, P).
 
 imperative('Give').
 imperative('give').
@@ -22,7 +22,7 @@ pronoun('me').
 pronoun('us').
 
 % ex. the cheapest Mexican restaurant in Vancouver
-restaurant_description(P0, P7, Entity, C0, C7) :-
+restaurant_query(P0, P7, Entity, C0, C7) :-
     det(P0, P1, Entity, C0, C1),
     adj(P1, P2, Entity, C1, C2),             % one adjective only
     category(P2, P3, Entity, C2, C3),        % one category only
@@ -47,7 +47,7 @@ adj(['best' | P], P, _, [rating('5') |C], C).
 adj(['worst' | P], P, _, [rating('1') |C], C).
 adj(P, P, _, C, C).
 
-keyword(P3, P4, _, C, C)
+keyword(P3, P4, _, [term([P3|P4])], C)
 keyword(P, P, _, C, C).
 
 prep(['in' | P], P, _, C, C).
@@ -59,16 +59,14 @@ prep(['down' | P], P, _, C, C).
 prep(['within' | P], P, _, C, C).
 prep(P, P, _, C, C).
 
-location([L| P], P, L, C, C) :- isCanada(L).
-location([L| P], P, L, C, C) :- inCanada(L).
-location(['near me' | P], P, _, C, C).
-location(['area' | P], P, _, C, C).
-location(['city' | P], P, _, C, C).
-location(['block' | P], P, _, C, C).
-location(['community' | P], P, _, C, C).
-location(['neighborhood' | P], P, _, C, C).
-location(['Canada' | P], P, _, C, C).
-location(['canada' | P], P, _, C, C).
+location([L | P], P, L, [location('Canada')], C) :- isCanada(L).
+location([L | P], P, L, [location(L)], C) :- inCanada(L).
+location(['near me' | P], P, _, [location('nearby')], C).
+location(['area' | P], P, _, [location('nearby')], C).
+location(['city' | P], P, _, [location('nearby')], C).
+location(['block' | P], P, _, [location('nearby')], C).
+location(['community' | P], P, _, [location('nearby')], C).
+location(['neighborhood' | P], P, _, [location('nearby')], C).
 
 % isCanada(C) is true if C is Canada
 isCanada('Canada').
