@@ -1,4 +1,8 @@
-:- use_module(api).
+:- ensure_loaded([api, knowledge]).
+
+% Initialize the program
+init() :-
+    set_categories(C).
 
 % Starts program
 askUser() :-
