@@ -27,7 +27,6 @@ search(Constraints, Results) :-
     search_yelp_business(Params, Response),
     choose_best(Response.results, Results).
 
-
 % Parse user query and change them to Yelp query parameters
 parse_query([], []).
 parse_query([Constraint|T], [Param|P]) :-

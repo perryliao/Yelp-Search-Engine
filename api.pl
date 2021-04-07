@@ -8,8 +8,8 @@
 %%% User-Defined Modules
 :- ensure_loaded([secrets]). 
 
-yelp_business_url("https://api.yelp.com/v3/businesses/search?").
-result_limit("10").
+yelp_business_url('https://api.yelp.com/v3/businesses/search?term=taco').
+result_limit('10').
 
 % HTTP GET request for Yelp
 search_yelp_business(Query, Response) :- 
@@ -18,7 +18,9 @@ search_yelp_business(Query, Response) :-
 	generate_url(Url, Query, RequestUrl),                  % change to yelp api query parameters
 	http_get(RequestUrl, Json, [authorization(bearer(ApiKey))]),
   atom_json_dict(Json, Response, []).
-% exmaple query: 
+
+% exmaple query: search_yelp_business([('price', '1,2,3'),('location', 'vancouver'),('term', 'taco')], Response).
+% exmaple query: search_yelp_business([('price', '1,2,3'),('location', 'burnaby'),('categories', 'japanese'),('term', 'ramen')], Response).
 
 
 % Generates the correct URL with the provided query params.
@@ -28,8 +30,8 @@ generate_url(Url, Params, NewUrl) :-
 
 % Add initial paramter for the limit of number of yelp results
 add_limit_param(Url, NewUrl) :-
-	result_limit(limit),
-	string_concat("?limit=", limit, UrlEnd),
+	result_limit(Limit),
+	string_concat('?limit=', Limit, UrlEnd),
 	string_concat(Url, UrlEnd, NewUrl).
 
 % Turn parameters list into url
@@ -39,8 +41,8 @@ query_params(Url, [(Key, Val)|Tail], NewUrl) :-
 	string_concat(Url, Param, NextUrl),
 	query_params(NextUrl, Tail, NewUrl).
 
-% Takes each key val pair and turn them into "&" + Key + "=" + Val
+% Takes each key val pair and turn them into '&' + Key + '=' + Val
 paramterize(Key, Val, Param) :-
-	string_concat("&", Key, Front),
-	string_concat("=", Val, Back),
+	string_concat('&', Key, Front),
+	string_concat('=', Val, Back),
 	string_concat(Front, Back, Param).
