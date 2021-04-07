@@ -1,3 +1,5 @@
+:- ensure_loaded([knowledge]).
+
 query_head(['What', 'is' | P], P).
 query_head(['What', '\'', 's' | T], T).
 query_head([Imperative | T], T) :-
@@ -47,7 +49,7 @@ adj(['best' | P], P, _, [rating('5') |C], C).
 adj(['worst' | P], P, _, [rating('1') |C], C).
 adj(P, P, _, C, C).
 
-keyword(P3, P4, _, [term([P3|P4])], C)
+keyword(P3, P4, _, [term([P3|P4])], C).
 keyword(P, P, _, C, C).
 
 prep(['in' | P], P, _, C, C).
@@ -65,10 +67,14 @@ location(['city' | P], P, _, [location('nearby')], C).
 location(['block' | P], P, _, [location('nearby')], C).
 location(['community' | P], P, _, [location('nearby')], C).
 location(['neighborhood' | P], P, _, [location('nearby')], C).
-location([L | P], P, L, [location(L)], C) :- 
-    dif(L, 'near me'), 
-    dif(L, 'area'), 
-    dif(L, 'city'), 
-    dif(L, 'block'), 
-    dif(L, 'community'), 
-    dif(L, 'neighborhood'). 
+location([L | P], P, L, [location(L)], C) :-
+    dif(L, 'near me'),
+    dif(L, 'area'),
+    dif(L, 'city'),
+    dif(L, 'block'),
+    dif(L, 'community'),
+    dif(L, 'neighborhood').
+
+category([L | P], P, L, [category(L)], C) :-
+    set_categories(Categories),
+    member(L, Categories).
