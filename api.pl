@@ -18,6 +18,7 @@ search_yelp_business(Query, Response) :-
 	generate_url(Url, Query, RequestUrl),                  % change to yelp api query parameters
 	http_get(RequestUrl, Json, [authorization(bearer(ApiKey))]),
   atom_json_dict(Json, Response, []).
+% exmaple query: 
 
 
 % Generates the correct URL with the provided query params.
