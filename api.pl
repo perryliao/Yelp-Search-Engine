@@ -8,7 +8,7 @@
 %%% User-Defined Modules
 :- ensure_loaded([secrets]). 
 
-yelp_business_url('https://api.yelp.com/v3/businesses/search?term=taco').
+yelp_business_url('https://api.yelp.com/v3/businesses/search').
 result_limit('10').
 
 % HTTP GET request for Yelp
