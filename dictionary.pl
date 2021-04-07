@@ -59,16 +59,16 @@ prep(['down' | P], P, _, C, C).
 prep(['within' | P], P, _, C, C).
 prep(P, P, _, C, C).
 
-location([L | P], P, L, [location('Canada')], C) :- isCanada(L).
-location([L | P], P, L, [location(L)], C) :- inCanada(L).
 location(['near me' | P], P, _, [location('nearby')], C).
 location(['area' | P], P, _, [location('nearby')], C).
 location(['city' | P], P, _, [location('nearby')], C).
 location(['block' | P], P, _, [location('nearby')], C).
 location(['community' | P], P, _, [location('nearby')], C).
 location(['neighborhood' | P], P, _, [location('nearby')], C).
-
-% isCanada(C) is true if C is Canada
-isCanada('Canada').
-isCanada('canada').
-isCanada('can').
+location([L | P], P, L, [location(L)], C) :- 
+    dif(L, 'near me'), 
+    dif(L, 'area'), 
+    dif(L, 'city'), 
+    dif(L, 'block'), 
+    dif(L, 'community'), 
+    dif(L, 'neighborhood'). 

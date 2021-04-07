@@ -24,7 +24,7 @@ query(['I\'m', 'feeling', 'lucky'], Constraints) :-
 % Search Yelp Database and make API call
 search(Constraints, Results) :-
     parse_query(Constraints, Params),
-    search_yelp_business(SearchTerm, Location, Category, Price, Response),  % not sure how to parse these terms
+    search_yelp_business(Params, Response),
     choose_best(Response.results, Results).
 
 
@@ -37,9 +37,8 @@ parse_query([Constraint|T], [Param|P]) :-
 parameters(rating(Rating), ('rating', Rating)).
 parameters(price(Price), ('price', Price)).
 parameters(term(Keyword), ('term', Keyword)).
-parameters(location('Canada'), ('location', 'Canada')).
 parameters(location('nearby'), ('location', Location)) :- nearby(Location).
-parameters(location(Location), ('location', Location)) :- dif(Location, 'nearby'), dif(Location, 'Canada').
+parameters(location(Location), ('location', Location)) :- dif(Location, 'nearby').
 
 
 % Choose to return the most fitting results from list of yelp responses
