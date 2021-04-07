@@ -1,5 +1,10 @@
 :- use_module(api).
 :- use_module(dictionary).
+:- use_module(knowledge).
+
+% Initialize the program
+init() :-
+    set_categories(C).
 
 nearby('Vancouver').
 
@@ -44,7 +49,7 @@ parameters(location(Location), ('location', Location)) :- dif(Location, 'nearby'
 choose_best(Response, Results) :-
 
 
-% Return currently stored user query parameters to search for a restaurant 
+% Return currently stored user query parameters to search for a restaurant
 % Based on our smart recommendation system
 smart_query(Constraints) :-
 
@@ -56,7 +61,7 @@ smart_query(Constraints) :-
 
 
 % Return search results
-return_results([]) :- 
+return_results([]) :-
     writeln("No restaurants were found with those descriptions.").
 return_results(Result) :-
     writeln(Result.restaurant_name),
