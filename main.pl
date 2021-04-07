@@ -1,10 +1,33 @@
 :- use_module(api).
 :- use_module(dictionary).
 :- use_module(knowledge).
+:- use_module(library(lists)).
 
+
+/* global variable Rec as a list of strings
+Rec	::=	atom	                % whole content of a variable
+ 	 	atom(String,…,String)	% element of an array
+ 	 	Rec-String	            % sub-term selection
+String ::= string               % immediate value
+           Rec	                % indirect value
+*/
+
+% dictionary
+dict_x(X, X.x).
+add_postal_code(Dict, Dict.put(postal_code, Code)) :-
+        find_postal_code(Dict.city,
+                         Dict.street,
+                         Dict.house_number,
+                         Code).
+ 
 % Initialize the program
 init() :-
-    set_categories(C).
+    set_categories(C),
+    initialzing(Rec).   % initialzing Rec as an array
+
+initialzing(Rec) :-
+    g_assign(Rec, g_array).
+
 
 nearby('Vancouver').
 
