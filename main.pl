@@ -1,6 +1,4 @@
-:- use_module(api).
-:- use_module(dictionary).
-:- use_module(knowledge).
+:- ensure_loaded([api, dictionary, knowledge]).
 
 % Initialize the program
 init() :-
@@ -46,12 +44,12 @@ parameters(location(Location), ('location', Location)) :- dif(Location, 'nearby'
 
 
 % Choose to return the most fitting results from list of yelp responses
-choose_best(Response, Results) :-
+% choose_best(Response, Results) :-
 
 
 % Return currently stored user query parameters to search for a restaurant
 % Based on our smart recommendation system
-smart_query(Constraints) :-
+% smart_query(Constraints) :-
 
 
 % Store user query

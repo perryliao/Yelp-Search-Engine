@@ -47,7 +47,7 @@ adj(['best' | P], P, _, [rating('5') |C], C).
 adj(['worst' | P], P, _, [rating('1') |C], C).
 adj(P, P, _, C, C).
 
-keyword(P3, P4, _, [term([P3|P4])], C)
+keyword(P3, P4, _, [term([P3|P4])], C).
 keyword(P, P, _, C, C).
 
 prep(['in' | P], P, _, C, C).
