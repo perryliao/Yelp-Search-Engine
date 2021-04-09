@@ -6,22 +6,31 @@
 :- use_module(library(uri)).
 
 %%% User-Defined Modules
-:- ensure_loaded([secrets]). 
+:- ensure_loaded([secrets]).
 
-yelp_business_url('https://api.yelp.com/v3/businesses/search?term=taco').
+yelp_business_url('https://api.yelp.com/v3/businesses/search').
 result_limit('10').
 
 % HTTP GET request for Yelp
-search_yelp_business(Query, Response) :- 
+search_yelp_business(Query, Response) :-
   yelp_business_url(Url),                                % access yelp business api
   yelp_api_key(ApiKey),                                  % access yelp api key
-	generate_url(Url, Query, RequestUrl),                  % change to yelp api query parameters
+	generate_url(Url, Query, RequestUrl),                % change to yelp api query parameters
 	http_get(RequestUrl, Json, [authorization(bearer(ApiKey))]),
   atom_json_dict(Json, Response, []).
 
 % exmaple query: search_yelp_business([('price', '1,2,3'),('location', 'vancouver'),('term', 'taco')], Response).
 % exmaple query: search_yelp_business([('price', '1,2,3'),('location', 'burnaby'),('categories', 'japanese'),('term', 'ramen')], Response).
 
+% HTTP GET for categories
+make_category_request(Response) :-
+    yelp_api_key(KEY),
+	http_get([
+	    host('api.yelp.com'),
+	    path('/v3/categories')
+	], JsonResponse, [authorization(bearer(KEY))]),
+	atom_json_dict(JsonResponse, Res, []),
+	Response = Res.categories.
 
 % Generates the correct URL with the provided query params.
 generate_url(Url, Params, NewUrl) :-
@@ -36,7 +45,7 @@ add_limit_param(Url, NewUrl) :-
 
 % Turn parameters list into url
 query_params(Url, [], Url).
-query_params(Url, [(Key, Val)|Tail], NewUrl) :- 
+query_params(Url, [(Key, Val)|Tail], NewUrl) :-
 	paramterize(Key, Val, Param),
 	string_concat(Url, Param, NextUrl),
 	query_params(NextUrl, Tail, NewUrl).
@@ -46,3 +55,4 @@ paramterize(Key, Val, Param) :-
 	string_concat('&', Key, Front),
 	string_concat('=', Val, Back),
 	string_concat(Front, Back, Param).
+
