@@ -9,7 +9,7 @@ askUser() :-
     readln(Ln),
     query(Ln, Constraints),
     search(Constraints, Result),
-    return_results(Result).
+    return_results(Result.businesses).
 
 % Parse regular restaurant query
 query(P0, Constraints) :-
@@ -57,9 +57,45 @@ parameters(location(Location), ('location', Location)) :- dif(Location, 'nearby'
 
 % Return search results
 return_results([]) :-
-    writeln("No restaurants were found with those descriptions.").
-return_results(Result) :-
-    writeln(Result.restaurant_name),
-    writeln(Result.restaurant_price),
-    writeln(Result.restaurant_rating),
-    writeln(Result.restaurant_address).
+    writeln("No restaurants were found with those descriptions. Maybe try again with a different query?").
+return_results([Result | Rest]) :-
+    writeln(""),
+    write("Restaurant Name: "), writeln(Result.name),
+    write("Categories: "), print_categories(Result.categories),
+%    write("Price: "), writeln(Result.price), % not all results contain price
+    write("Rating / Number of reviews: "), write(Result.rating), write(" / "), writeln(Result.review_count),
+    write("Address: "), print_address(Result.location.display_address),
+    write("Are you happy with this result? (yes/no):"),
+    readln(Ln),
+    check_end(Ln, Rest).
+
+check_end([Ln], _) :-
+    happy(Ln),
+    writeln("See you again!").
+check_end([Ln], Rest) :-
+    unhappy(Ln),
+    return_results(Rest).
+check_end(_, Rest) :-
+    write("Please enter (yes/no): "),
+    readln(Ln),
+    check_end(Ln, Rest).
+
+print_categories([]) :- writeln("").
+print_categories([Cat | Rest]) :-
+    write(Cat.title), write(" "),
+    print_categories(Rest).
+
+print_address([]) :- writeln("").
+print_address([Addr | Rest]) :-
+    write(Addr), write(" "),
+    print_address(Rest).
+
+happy('Yes').
+happy('Y').
+happy('yes').
+happy('y').
+
+unhappy('No').
+unhappy('N').
+unhappy('no').
+unhappy('n').
