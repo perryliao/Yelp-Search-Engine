@@ -45,7 +45,7 @@ print_address([Addr | Rest]) :-
     print_address(Rest).
 
 save_results(ResultCategories) :-
-    open('userdata', write, Out),
+    open('userdata', append, Out),
     save_categories(Out, ResultCategories),
     close(Out).
 
@@ -53,3 +53,23 @@ save_categories(_, []).
 save_categories(Out, [Cat | Rest]) :-
     writeln(Out, Cat.alias),
     save_categories(Out, Rest).
+
+% https://stackoverflow.com/questions/4805601/read-a-file-line-by-line-in-prolog
+read_results():-
+    open('userdata', read, Stream),
+    read_lines(Stream),
+    close(Stream).
+
+read_lines(Stream) :-
+   read_line(Stream, _), !,
+   read_lines(Stream).
+read_lines(_).
+
+read_line(S, X) :-
+    read_line_to_codes(S, L),
+    read_line2(L, X).
+
+read_line2(end_of_file, _) :- !, fail.
+read_line2(L, X) :-
+    atom_codes(X, L),
+    writeln(X).
