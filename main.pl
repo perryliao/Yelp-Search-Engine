@@ -7,7 +7,6 @@ askUser() :-
     flush_output(current_output),
     readln(Ln),
     query(Ln, Constraints, Params),
-    writeln(Params),
     search(Constraints, Result, Params),
     return_results(Result.businesses).
 
@@ -77,5 +76,3 @@ make_category_pair([], []).
 make_category_pair(Categories, [('categories', String)]) :-
     atomic_list_concat(Categories, ',', Atom),
     atom_string(Atom, String).
-
-
