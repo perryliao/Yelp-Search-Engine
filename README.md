@@ -7,10 +7,17 @@ _We wanted to use the Prolog knowledge we have learned in class and extrapolate 
 ## To Run the Program
 1. `swipl`
 2. `[main].`
-3. `AskUser()`
+3. `askUser()`
 
 ---
 
 # Exmaple Queries
-"What is the best taco restaurant?"
-"Give me the cheapest Korean food"
+"Find the best mexican restaurant nearby"
+
+"Recommend the cheapest korean food in kyoto"
+
+# Something Extra!
+"I'm feeling lucky"
+
+The program saves all your recorded queries, and uses them to find something catered to you! Enter this to the program to get something back, just for you!
+Should the user wish to reset their data, run `clear_cache().` and that will reset everything the program knows about the current user.
