@@ -55,4 +55,3 @@ paramterize(Key, Val, Param) :-
 	string_concat('&', Key, Front),
 	string_concat('=', Val, Back),
 	string_concat(Front, Back, Param).
-
