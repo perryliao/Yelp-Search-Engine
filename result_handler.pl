@@ -56,7 +56,7 @@ save_categories(Out, [Cat | Rest]) :-
 
 clear_cache() :-
     open('userdata', write, Out),
-    write(Out, ""),
+    writeln(Out, "restaurants."),
     close(Out).
 
 convert_to_dict(['end_of_file'], D, D).
@@ -65,12 +65,14 @@ convert_to_dict([C | R], D, Dict) :-
     N is X + 1,
     convert_to_dict(R, D.put(C, N), Dict).
 convert_to_dict([C | R], D, Dict) :-
-    convert_to_dict(R, D.put(C, 1), Dict).
+    append(D.get('categories'), [C], New),
+    D1 = D.put('categories', New),
+    convert_to_dict(R, D1.put(C, 1), Dict).
 
 % https://stackoverflow.com/questions/4805601/read-a-file-line-by-line-in-prolog
 read_results(Dict) :-
     read_result_helper(Lines),
-    convert_to_dict(Lines, _{}, Dict).
+    convert_to_dict(Lines, _{categories:[]}, Dict).
 
 read_result_helper(Lines):-
     open('userdata', read, Str),
