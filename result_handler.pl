@@ -29,10 +29,10 @@ check_end([Ln], Result, _) :-
 check_end([Ln], _, Rest) :-
     unhappy(Ln),
     return_results(Rest).
-check_end(_, _, Rest) :-
+check_end(_, Result, Rest) :-
     write("Please enter (yes/no): "),
     readln(Ln),
-    check_end(Ln, Rest).
+    check_end(Ln, Result, Rest).
 
 print_categories([]) :- writeln("").
 print_categories([Cat | Rest]) :-
