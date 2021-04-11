@@ -51,25 +51,36 @@ save_results(ResultCategories) :-
 
 save_categories(_, []).
 save_categories(Out, [Cat | Rest]) :-
-    writeln(Out, Cat.alias),
+    write(Out, Cat.alias), writeln(Out, "."),
     save_categories(Out, Rest).
 
+clear_cache() :-
+    open('userdata', write, Out),
+    write(Out, ""),
+    close(Out).
+
+convert_to_dict(['end_of_file'], D, D).
+convert_to_dict([C | R], D, Dict) :-
+    X = D.get(C),
+    N is X + 1,
+    convert_to_dict(R, D.put(C, N), Dict).
+convert_to_dict([C | R], D, Dict) :-
+    convert_to_dict(R, D.put(C, 1), Dict).
+
 % https://stackoverflow.com/questions/4805601/read-a-file-line-by-line-in-prolog
-read_results():-
-    open('userdata', read, Stream),
-    read_lines(Stream),
-    close(Stream).
+read_results(Dict) :-
+    read_result_helper(Lines),
+    convert_to_dict(Lines, _{}, Dict).
 
-read_lines(Stream) :-
-   read_line(Stream, _), !,
-   read_lines(Stream).
-read_lines(_).
+read_result_helper(Lines):-
+    open('userdata', read, Str),
+    read_file(Str,Lines),
+    close(Str), nl.
 
-read_line(S, X) :-
-    read_line_to_codes(S, L),
-    read_line2(L, X).
+read_file(Stream,[]) :-
+    at_end_of_stream(Stream).
 
-read_line2(end_of_file, _) :- !, fail.
-read_line2(L, X) :-
-    atom_codes(X, L),
-    writeln(X).
+read_file(Stream,[X|L]) :-
+    \+ at_end_of_stream(Stream),
+    read(Stream,X),
+    read_file(Stream,L).
