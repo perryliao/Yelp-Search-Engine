@@ -1,4 +1,4 @@
-:- ensure_loaded([api,dictionary]).
+:- ensure_loaded([api,dictionary, result_handler]).
 
 
 % Starts program
@@ -6,25 +6,28 @@ askUser() :-
     write("Search for Yelp Restaurants: "),
     flush_output(current_output),
     readln(Ln),
-    query(Ln, Constraints),
-    search(Constraints, Results),
-    return_results(Results).
-
-% Parse regular restaurant query
-query(P0, Constraints) :-
-    query_head(P0, P1),
-    dif(P0, ['I','\'','m', 'feeling', 'lucky']),
-    restaurant_query(P1, _, Constraints, _).
+    query(Ln, Constraints, Params),
+    writeln(Params),
+    search(Constraints, Result, Params),
+    return_results(Result.businesses).
 
 % Parse Im feeling lucky smart restaurant query
-% query(['I','\'','m', 'feeling', 'lucky'], Constraints) :-
- %   smart_query(Constraints).
+query(['I', '\'', 'm', 'feeling', 'lucky'], _, Params) :-
+    smart_query(Params).
+
+% Parse regular restaurant query
+query(P0, Constraints, _) :-
+    dif(P0, ['I', '\'', 'm', 'feeling', 'lucky']),
+    query_head(P0, P1),
+    restaurant_query(P1, _, Constraints, _).
 
 % Search Yelp Database and make API call
-search(Constraints, Results) :-
+search(Constraints, Results, _) :-
+    nonvar(Constraints),
     parse_query(Constraints, Params),
-    search_yelp_business(Params, Response),
-    choose_best(Response.businesses, Results).
+    search_yelp_business(Params, Results).
+search(_, Results, Params) :-
+    search_yelp_business(Params, Results).
 
 % Parse user query and change them to Yelp query parameters
 parse_query([], []).
@@ -38,27 +41,41 @@ parameters(term(Keyword), ('term', Keyword)).
 parameters(category(Category), ('categories', Category)).
 parameters(location(Location), ('location', Location)).
 
-
-% Choose to return the most fitting results from list of yelp responses
-%choose_best(Response, Results) :-
-
-
 % Return currently stored user query parameters to search for a restaurant
 % Based on our smart recommendation system
-%smart_query(Constraints) :-
+smart_query(Params) :-
+    read_results(Cache),
+    get_popular_categories(Cache, Categories),
+    make_category_pair(Categories, Res),
+    append([('term', 'restaurant'), ('location', 'vancouver')], Res, Params).
+
+% find the most popular categor(ies)
+get_popular_categories(Cache, Result) :-
+    get_largest_entries(Cache, Cache.categories, _, Result).
+
+get_largest_entries(Cache, [], H, Result) :-
+    get_popular_categories_entries(Cache, Cache.categories, H, Result).
+get_largest_entries(Cache, [C | R], Highest, Result) :-
+    var(Highest),
+    get_largest_entries(Cache, R, Cache.get(C), Result).
+get_largest_entries(Cache, [C | R], Highest, Result) :-
+    X = Cache.get(C),
+    X > Highest,
+    get_largest_entries(Cache, R, X, Result).
+get_largest_entries(Cache, [_ | R], Highest, Result) :-
+    get_largest_entries(Cache, R, Highest, Result).
+
+get_popular_categories_entries(_, [], _, []).
+get_popular_categories_entries(Cache, [C | R], H, [C | F]) :-
+    X = Cache.get(C),
+    X = H,
+    get_popular_categories_entries(Cache, R, H, F).
+get_popular_categories_entries(Cache, [_ | R], H, F) :-
+    get_popular_categories_entries(Cache, R, H, F).
+
+make_category_pair([], []).
+make_category_pair(Categories, [('categories', String)]) :-
+    atomic_list_concat(Categories, ',', Atom),
+    atom_string(Atom, String).
 
 
-% Store user query
-
-
-% Recommendation algorithm
-
-
-% Return search results
-return_results([]) :-
-    writeln("No restaurants were found with those descriptions.").
-return_results(Result) :-
-    writeln(Result.restaurant_name),
-    writeln(Result.restaurant_price),
-    writeln(Result.restaurant_rating),
-    writeln(Result.restaurant_address).

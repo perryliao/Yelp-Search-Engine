@@ -14,6 +14,8 @@ imperative('Suggest').
 imperative('suggest').
 imperative('Recommend').
 imperative('recommend').
+imperative('Find').
+imperative('find').
 
 
 % ex. the cheapest Mexican restaurant in Vancouver
