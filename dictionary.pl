@@ -46,10 +46,10 @@ category([L | P], P, [category(L)| C], C) :-
     set_categories(Categories),
     member_open(L, Categories).
 
-keyword(['restaurant' | P], P, C, C).
-keyword(['food' | P], P, C, C).
-keyword(['place' | P], P, C, C).
-keyword(P, P, C, C).
+keyword(['restaurant' | P], P, [term('restaurant')| C], C).
+keyword(['food' | P], P, [term('restaurant')| C], C).
+keyword(['place' | P], P, [term('restaurant')| C], C).
+keyword(P, P, [term('restaurant')| C], C).
 
 location([L | P], P, [location(L)| C], C).
 
