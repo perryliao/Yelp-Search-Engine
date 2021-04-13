@@ -2,6 +2,10 @@
 
 
 % Starts program
+init() :-
+    set_categories(C),
+    save_yelp_categories(C).
+
 askUser() :-
     write("Search for Yelp Restaurants: "),
     flush_output(current_output),
@@ -9,6 +13,8 @@ askUser() :-
     query(Ln, Constraints, Params),
     search(Constraints, Result, Params),
     return_results(Result.businesses).
+askUser() :-
+    write("That doesn't sound like a valid query. Why don't you try something else?").
 
 % Parse Im feeling lucky smart restaurant query
 query(['I', '\'', 'm', 'feeling', 'lucky'], _, Params) :-

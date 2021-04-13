@@ -6,7 +6,7 @@ query_head([Imperative | T], T) :-
     imperative(Imperative).
 query_head(['I', 'want' | P], P).
 query_head(['I', 'want', 'to', 'eat' | P], P).
-query_head(P, P).
+%query_head(P, P).
 
 imperative('Give').
 imperative('give').
@@ -22,7 +22,7 @@ imperative('find').
 restaurant_query(P0, P7, C0, C7) :-
     det(P0, P1, C0, C1),
     adj(P1, P2, C1, C2),             % one adjective only
-    category(P2, P3, C2, C3),        % one category only
+    categories(P2, P3, C2, C3),        % one category only
     keyword(P3, P4, C3, C4),         % remaining terms
     prep(P4, P5, C4, C5),
     det(P5, P6, C5, C6),
@@ -44,9 +44,9 @@ adj(['best' | P], P, [rating('5') |C], C).
 adj(['worst' | P], P, [rating('1') |C], C).
 adj(P, P, C, C).
 
-category([L | P], P, [category(L)| C], C) :-
-    set_categories(Categories),
-    member_open(L, Categories).
+categories([L | P], P, [category(L)| C], C) :-
+    read_categories_file(Categories),
+    member(L, Categories).
 
 keyword(['restaurant' | P], P, [term('restaurant')| C], C).
 keyword(['food' | P], P, [term('restaurant')| C], C).
