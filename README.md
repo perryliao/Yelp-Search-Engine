@@ -7,7 +7,8 @@ _We wanted to use the Prolog knowledge we have learned in class and extrapolate 
 ## To Run the Program
 1. `swipl`
 2. `[main].`
-3. `askUser()`
+3. If this is your first time running the program, run `init().`
+4. To write a query, run `askUser().`
 
 ---
 
